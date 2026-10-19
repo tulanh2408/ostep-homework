@@ -1,4 +1,4 @@
-English | [Tiếng Việt](README.vi.md)
+English | [Tiếng Việt](./i18n/vi_VN/README.vi.md)
 
 ---
 # Homeworks
