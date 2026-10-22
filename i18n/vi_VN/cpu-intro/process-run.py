@@ -284,14 +284,14 @@ class scheduler:
 #
 
 parser = OptionParser()
-parser.add_option('-s', '--seed', default=0, help='giá trị hạt giống ngẫu nhiên (random seed)', action='store', type='int', dest='seed')
-parser.add_option('-P', '--program', default='', help='kiểm soát chi tiết hơn kịch bản chương trình', action='store', type='string', dest='program')
-parser.add_option('-l', '--processlist', default='', help='danh sách các tiến trình cần chạy, phân tách bằng dấu phẩy, có dạng X1:Y1,X2:Y2,... trong đó X là số lượng lệnh mà tiến trình đó cần chạy, và Y là xác suất (từ 0 đến 100) để một lệnh sẽ sử dụng CPU hoặc phát ra một yêu cầu I/O', action='store', type='string', dest='process_list')
-parser.add_option('-L', '--iolength', default=5, help='thời gian để một thao tác I/O hoàn thành', action='store', type='int', dest='io_length')
-parser.add_option('-S', '--switch', default='SWITCH_ON_IO', help='thời điểm chuyển đổi giữa các tiến trình: SWITCH_ON_IO, SWITCH_ON_END', action='store', type='string', dest='process_switch_behavior')
-parser.add_option('-I', '--iodone', default='IO_RUN_LATER', help='hành vi xử lý khi I/O kết thúc: IO_RUN_LATER, IO_RUN_IMMEDIATE', action='store', type='string', dest='io_done_behavior')
-parser.add_option('-c', help='tính toán sẵn đáp án', action='store_true', default=False, dest='solve')
-parser.add_option('-p', '--printstats', help='in thông tin thống kê ở cuối phiên chạy; chỉ hữu ích khi dùng kèm cờ -c (nếu không thì thống kê sẽ không được in ra)', action='store_true', default=False, dest='print_stats')
+parser.add_option('-s', '--seed', default=0, help='Giá trị hạt giống ngẫu nhiên (random seed)', action='store', type='int', dest='seed')
+parser.add_option('-P', '--program', default='', help='Kiểm soát chi tiết hơn kịch bản chương trình', action='store', type='string', dest='program')
+parser.add_option('-l', '--processlist', default='', help='Danh sách các tiến trình cần chạy, phân tách bằng dấu phẩy, có dạng X1:Y1,X2:Y2,... trong đó X là số lượng lệnh mà tiến trình đó cần chạy, và Y là xác suất (từ 0 đến 100) để một lệnh sẽ sử dụng CPU hoặc phát ra một yêu cầu I/O', action='store', type='string', dest='process_list')
+parser.add_option('-L', '--iolength', default=5, help='Thời gian để một thao tác I/O hoàn thành', action='store', type='int', dest='io_length')
+parser.add_option('-S', '--switch', default='SWITCH_ON_IO', help='Thời điểm chuyển đổi giữa các tiến trình: SWITCH_ON_IO, SWITCH_ON_END', action='store', type='string', dest='process_switch_behavior')
+parser.add_option('-I', '--iodone', default='IO_RUN_LATER', help='Hành vi xử lý khi I/O kết thúc: IO_RUN_LATER, IO_RUN_IMMEDIATE', action='store', type='string', dest='io_done_behavior')
+parser.add_option('-c', help='Mô phỏng và tính toán các chỉ số', action='store_true', default=False, dest='solve')
+parser.add_option('-p', '--printstats', help='In thông tin thống kê chỉ số chi tiết ở cuối phiên chạy; chỉ hữu ích khi dùng kèm cờ -c (nếu không thì thống kê sẽ không được in ra)', action='store_true', default=False, dest='print_stats')
 (options, args) = parser.parse_args()
 
 random_seed(options.seed)
