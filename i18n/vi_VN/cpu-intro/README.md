@@ -1,7 +1,7 @@
 
 # Tổng quan
 
-Chương trình `process-run.py` này cho phép bạn quan sát trạng thái của một tiến trình (process state) thay đổi như thế nào khi nó đang chạy trên CPU. Như đã mô tả ở chương này, các tiến trình có thể ở một trong những trạng thái sau đây:
+Chương trình `process-run.py` này cho phép bạn theo dõi trạng thái của một tiến trình (process state) khi nó đang chạy trên CPU. Như đã mô tả ở chương này, các tiến trình có thể ở một trong những trạng thái sau đây:
 
 ```sh
 RUNNING (Đang chạy) - Tiến trình đang trực tiếp thực thi trên CPU

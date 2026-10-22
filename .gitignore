@@ -1,0 +1,37 @@
+# ============================================
+# CÁC FILE DỊCH THUẬT / BẢN NHÁP (Translation)
+# ============================================
+
+# Bỏ qua toàn bộ thư mục i18n nếu bạn lưu bản dịch riêng biệt ở đây
+# (Bỏ dấu # ở dòng dưới nếu bạn muốn ignore cả thư mục i18n)
+# i18n/
+
+# Bỏ qua script dịch thuật chứa API Key (đề phòng lỡ tay push API key lên GitHub)
+translate_repo.py
+**/translate_repo.py
+*.env
+.env*
+
+# ============================================
+# PYTHON & MÔI TRƯỜNG ẢO (Python & Virtual Env)
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Môi trường ảo (Virtual Environments)
+.venv/
+venv/
+ENV/
+env/
+
+# IDE & Editor Configs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Hệ điều hành (OS generated files)
+.DS_Store
+Thumbs.db

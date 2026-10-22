@@ -5,7 +5,7 @@ import sys
 from optparse import OptionParser
 import random
 
-# to make Python2 and Python3 act the same -- how dumb
+# Tạo cho Python2 và Python3 có cùng kịch bản -- how dumb
 def random_seed(seed):
     try:
         random.seed(seed, version=1)
@@ -17,7 +17,7 @@ def random_seed(seed):
 SCHED_SWITCH_ON_IO = 'SWITCH_ON_IO'
 SCHED_SWITCH_ON_END = 'SWITCH_ON_END'
 
-# io finished behavior (Hành vi hoàn thành I/O)
+# io finished behavior (Hành vi hoàn tất I/O)
 IO_RUN_LATER = 'IO_RUN_LATER'
 IO_RUN_IMMEDIATE = 'IO_RUN_IMMEDIATE'
 
@@ -27,21 +27,22 @@ STATE_READY = 'READY'
 STATE_DONE = 'DONE'
 STATE_WAIT = 'BLOCKED'
 
-# members of process structure (Thành viên của cấu trúc tiến trình)
+# members of process structure (Các trường thông tin của tiến trình)
 PROC_CODE = 'code_'
 PROC_PC = 'pc_'
 PROC_ID = 'pid_'
 PROC_STATE = 'proc_state_'
 
-# things a process can do (Trạng thái của tiến trình hiện tại)
-DO_COMPUTE = 'cpu'
-DO_IO = 'io'
-DO_IO_DONE = 'io_done'
+# things a process can do (Các hành động / sự kiện mà một tiến trình có thể thực hiện)
+DO_COMPUTE = 'cpu'          # Sử dụng CPU (Tính toán)
+DO_IO = 'io'                # Yêu cầu I/O (Bị chặn / Chờ dữ liệu)
+DO_IO_DONE = 'io_done'      # Hoàn thành I/O (Sẵn sàng chạy tiếp)
 
 
 class scheduler:
     def __init__(self, process_switch_behavior, io_done_behavior, io_length):
         # keep set of instructions for each of the processes
+        # lưu danh sách tập lệnh của từng tiến trình
         self.proc_info = {}
         self.process_switch_behavior = process_switch_behavior
         self.io_done_behavior = io_done_behavior
@@ -61,6 +62,7 @@ class scheduler:
     #   c7,i,c1,i
     # which means
     #   compute for 7, then i/o, then compute for 1, then i/o
+    #   Chạy 7 lệnh trong CPU, sau đó I/O, rồi chạy 1 lệnh CPU, cuối cùng gọi lại I/O
     def load_program(self, program):
         proc_id = self.new_process()
         for line in program.split(','):
@@ -72,6 +74,7 @@ class scheduler:
             elif opcode == 'i':
                 self.proc_info[proc_id][PROC_CODE].append(DO_IO)
                 # add one compute to HANDLE the I/O completion
+                # Thêm một lệnh CPU để xử lý sự kiện hoàn tất I/O
                 self.proc_info[proc_id][PROC_CODE].append(DO_IO_DONE)
             else:
                 print('Mã lệnh không hợp lệ %s (phải là c hoặc i)' % opcode)
@@ -94,6 +97,7 @@ class scheduler:
             else:
                 self.proc_info[proc_id][PROC_CODE].append(DO_IO)
                 # add one compute to HANDLE the I/O completion
+                # Thêm một lệnh CPU để xử lý sự kiện hoàn tất I/O
                 self.proc_info[proc_id][PROC_CODE].append(DO_IO_DONE)
         return
 
@@ -189,6 +193,7 @@ class scheduler:
             return
 
         # track outstanding IOs, per process
+        # Theo dõi các yêu cầu I/O đang xử lý của từng tiến trình
         self.io_finish_times = {}
         for pid in range(len(self.proc_info)):
             self.io_finish_times[pid] = []
@@ -198,6 +203,7 @@ class scheduler:
         self.move_to_running(STATE_READY)
 
         # OUTPUT: headers for each column
+        # ĐẦU RA: tạo tiêu đề cho mỗi cột
         print('%s' % 'Time', end='') 
         for pid in range(len(self.proc_info)):
             print('%14s' % ('PID:%2d' % (pid)), end='')
@@ -205,14 +211,14 @@ class scheduler:
         print('%14s' % 'IOs', end='')
         print('')
 
-        # init statistics
+        # init statistics (Khởi tạo các biến thống kê)
         io_busy = 0
         cpu_busy = 0
 
         while self.get_num_active() > 0:
             clock_tick += 1
 
-            # check for io finish
+            # check for io finish (Kiểm tra io hoàn tất)
             io_done = False
             for pid in range(len(self.proc_info)):
                 if clock_tick in self.io_finish_times[pid]:
@@ -228,13 +234,16 @@ class scheduler:
                         # IO_RUN_LATER
                         if self.process_switch_behavior == SCHED_SWITCH_ON_END and self.get_num_runnable() > 1:
                             # this means the process that issued the io should be run
+                            # Chỉ định tiến trình I/O vừa xong chiếm quyền CPU
                             self.next_proc(pid)
                         if self.get_num_runnable() == 1:
                             # this is the only thing to run: so run it
+                            # Không còn lựa chọn nào khác: Chạy tiến trình này
                             self.next_proc(pid)
                     self.check_if_done()
             
             # if current proc is RUNNING and has an instruction, execute it
+            # Nếu hiện tại proc ĐANG CHẠY và vẫn còn lệnh, hãy thực thi nó
             instruction_to_execute = ''
             if self.proc_info[self.curr_proc][PROC_STATE] == STATE_RUNNING and \
                    len(self.proc_info[self.curr_proc][PROC_CODE]) > 0:
@@ -242,6 +251,7 @@ class scheduler:
                 cpu_busy += 1
 
             # OUTPUT: print what everyone is up to
+            # ĐẨU RA: In ra cái nó đang làm
             if io_done:
                 print('%3d*' % clock_tick, end='')
             else:
@@ -253,12 +263,14 @@ class scheduler:
                     print('%14s' % (self.proc_info[pid][PROC_STATE]), end='')
 
             # CPU output here: if no instruction executes, output a space, otherwise a 1 
+            # Đầu ra CPU: Nếu không có lệnh được thực thi, in ra khoảng trống (space), nếu có thì in '1' 
             if instruction_to_execute == '':
                 print('%14s' % ' ', end='')
             else:
                 print('%14s' % '1', end='')
 
             # IO output here:
+            # Đầu ra I/O: 
             num_outstanding = self.get_ios_in_flight(clock_tick)
             if num_outstanding > 0:
                 print('%14s' % str(num_outstanding), end='')
@@ -287,7 +299,7 @@ parser = OptionParser()
 parser.add_option('-s', '--seed', default=0, help='Giá trị hạt giống ngẫu nhiên (random seed)', action='store', type='int', dest='seed')
 parser.add_option('-P', '--program', default='', help='Kiểm soát chi tiết hơn kịch bản chương trình', action='store', type='string', dest='program')
 parser.add_option('-l', '--processlist', default='', help='Danh sách các tiến trình cần chạy, phân tách bằng dấu phẩy, có dạng X1:Y1,X2:Y2,... trong đó X là số lượng lệnh mà tiến trình đó cần chạy, và Y là xác suất (từ 0 đến 100) để một lệnh sẽ sử dụng CPU hoặc phát ra một yêu cầu I/O', action='store', type='string', dest='process_list')
-parser.add_option('-L', '--iolength', default=5, help='Thời gian để một thao tác I/O hoàn thành', action='store', type='int', dest='io_length')
+parser.add_option('-L', '--iolength', default=5, help='Thời gian để một sự kiện I/O hoàn thành', action='store', type='int', dest='io_length')
 parser.add_option('-S', '--switch', default='SWITCH_ON_IO', help='Thời điểm chuyển đổi giữa các tiến trình: SWITCH_ON_IO, SWITCH_ON_END', action='store', type='string', dest='process_switch_behavior')
 parser.add_option('-I', '--iodone', default='IO_RUN_LATER', help='Hành vi xử lý khi I/O kết thúc: IO_RUN_LATER, IO_RUN_IMMEDIATE', action='store', type='string', dest='io_done_behavior')
 parser.add_option('-c', help='Mô phỏng và tính toán các chỉ số', action='store_true', default=False, dest='solve')
@@ -312,23 +324,23 @@ else:
 assert(options.io_length >= 0)
 
 if options.solve == False:
-    print('Tạo vết thực thi cho những gì sẽ xảy ra khi chạy các tiến trình này:')
+    print('Produce a trace of what would happen when you run these processes:')
     for pid in range(s.get_num_processes()):
         print('Tiến trình %d' % pid)
         for inst in range(s.get_num_instructions(pid)):
             print('  %s' % s.get_instruction(pid, inst))
         print('')
-    print('Hành vi quan trọng:')
-    print('  Hệ thống sẽ chuyển đổi khi ', end='')
+    print('Important behaviors:')
+    print('  System will switch when ', end='')
     if options.process_switch_behavior == SCHED_SWITCH_ON_IO:
-        print('tiến trình hiện tại HOÀN TẤT (FINISHED) hoặc PHÁT YÊU CẦU I/O')
+        print('the current process is FINISHED or ISSUES AN IO')
     else:
-        print('tiến trình hiện tại đã HOÀN TẤT (FINISHED)')
-    print('  Sau khi I/O hoàn tất, tiến trình phát yêu cầu I/O sẽ ', end='')
+        print('the current process is FINISHED')
+    print('  After IOs, the process issuing the IO will ', end='')
     if options.io_done_behavior == IO_RUN_IMMEDIATE:
-        print('chạy NGAY LẬP TỨC')
+        print('run IMMEDIATELY')
     else:
-        print('chạy SAU (khi đến lượt của nó)')
+        print('run LATER (when it is its turn)')
     print('')
     exit(0)
 
@@ -336,7 +348,7 @@ if options.solve == False:
 
 if options.print_stats:
     print('')
-    print('Thống kê: Tổng thời gian %d' % clock_tick)
-    print('Thống kê: CPU bận %d (%.2f%%)' % (cpu_busy, 100.0 * float(cpu_busy)/clock_tick))
-    print('Thống kê: I/O bận %d (%.2f%%)' % (io_busy, 100.0 * float(io_busy)/clock_tick))
+    print('Stats: Total Time %d' % clock_tick)
+    print('Stats: CPU Busy %d (%.2f%%)' % (cpu_busy, 100.0 * float(cpu_busy)/clock_tick))
+    print('Stats: IO Busy  %d (%.2f%%)' % (io_busy, 100.0 * float(io_busy)/clock_tick))
     print('')
