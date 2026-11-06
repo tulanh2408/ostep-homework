@@ -32,7 +32,7 @@ prompt> python process-run.py -h
 Usage: process-run.py [options]
 
 Options:
-  -h, --help            Hiển thị tóm tắt hướng dẫn lệnh và thoát
+  -h, --help            Hiển thị thông báo trợ giúp và thoát
   -s SEED, --seed=SEED  Giá trị hạt giống ngẫu nhiên (random seed)
   -l PROCESS_LIST, --processlist=PROCESS_LIST
                         Danh sách các tiến trình cần chạy, có dạng X1:Y1,X2:Y2,... trong đó X là số lượng lệnh mà tiến trình đó cần chạy, và Y là xác suất (từ 0 đến 100) để một lệnh sẽ sử dụng CPU hoặc phát ra một yêu cầu I/O
@@ -79,7 +79,7 @@ Important behaviors:
 prompt> 
 ```
 
-Ở đây, tiến trình chúng ta chỉ định là "5:100", nghĩa là nó bao gồm 5 chỉ thị, và xác suất để mỗi lệnh là một lệnh dùng CPU là 100%.
+Ở đây, tiến trình chúng ta chỉ định là "5:100", nghĩa là nó bao gồm 5 chỉ thị, và xác suất để mỗi lệnh là một lệnh sử dụng CPU là 100%.
 
 Bạn có thể xem chuyện gì xảy ra với tiến trình này bằng cách thêm cờ -c để chương trình tự tính toán kết quả cho bạn:
 

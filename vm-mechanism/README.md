@@ -7,6 +7,7 @@ running the program to test out your understanding of base and bounds. First,
 run without the -c flag to generate a set of translations and see if you can
 correctly perform the address translations yourself. Then, when done, run with
 the -c flag to check your answers.
+# Chương trình này giúp bạn nhìn cách các địa chỉ dịch được trình diễn trong một hệ thống
 
 In this homework, we will assume a slightly different address space than our
 canonical one with a heap and stack at opposite ends of the space. Rather, we

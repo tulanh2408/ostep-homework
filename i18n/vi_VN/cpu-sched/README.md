@@ -1,11 +1,11 @@
 
 # Tổng quan
 
-Chương trình `scheduler.py` cho phép bạn quan sát cách các bộ lập lịch (scheduler) khác nhau hoạt động dựa trên các chỉ số lập lịch như thời gian phản hồi (response time), thời gian hoàn thành (turnaround time), và tổng thời gian chờ (wait time). Ba bộ lập lịch được "cài đặt" sẵn gồm: FIFO, SJF, và RR.
+Chương trình `scheduler.py` cho phép bạn quan sát cách các bộ lập lịch (scheduler) khác nhau hoạt động dựa trên các chỉ số lập lịch như thời gian phản hồi (Response time), thời gian hoàn thành (Turnaround time), và tổng thời gian chờ (Wait time). Ba bộ lập lịch được "cài đặt" sẵn gồm: FIFO, SJF, và RR.
 
 Có hai bước để chạy chương trình.
 
-Đầu tiên, chạy mà không có cờ `-c`: thao tác này sẽ hiển thị bài toán bạn cần giải mà không hiển thị kết quả. Ví dụ, nếu bạn muốn tính toán thời gian phản hồi, thời gian hoàn thành và thời gian chờ cho ba tác vụ (job) bằng chính sách FIFO, hãy chạy lệnh sau:
+Đầu tiên, chạy mà không có cờ `-c`: thao tác này sẽ hiển thị bài toán bạn cần giải mà không hiển thị kết quả. Ví dụ, nếu bạn muốn tính toán thời gian phản hồi, thời gian hoàn thành và thời gian chờ cho ba tác vụ (jobs) bằng thuật toán FIFO, hãy chạy lệnh sau:
 
 ```sh
 prompt> ./scheduler.py -p FIFO -j 3 -s 100
@@ -16,7 +16,7 @@ Nếu lệnh trên không hoạt động, hãy thử lệnh này:
 prompt> python ./scheduler.py -p FIFO -j 3 -s 100
 ```
 
-Lệnh này chỉ định chính sách FIFO với ba tác vụ, và quan trọng là với một giá trị hạt giống ngẫu nhiên (random seed) cụ thể là 100. Nếu muốn xem lời giải chính xác cho bài toán này, bạn phải chỉ định lại đúng giá trị seed ngẫu nhiên đó. Hãy chạy thử và xem điều gì sẽ xảy ra. Đây là những gì bạn sẽ thấy:
+Lệnh này chỉ định thuật toán FIFO với ba tác vụ, và quan trọng là với một giá trị hạt giống ngẫu nhiên (random seed) cụ thể là 100. Nếu muốn xem lời giải chính xác cho bài toán này, bạn phải chỉ định lại đúng giá trị seed ngẫu nhiên đó. Hãy chạy thử và xem điều gì sẽ xảy ra. Đây là những gì bạn sẽ thấy:
 
 ```sh
 prompt> ./scheduler.py -p FIFO -j 3 -s 100
@@ -76,7 +76,7 @@ Các số liệu thống kê cuối cùng cũng rất hữu ích: chúng tính t
 
 Nếu bạn muốn thử cùng dạng bài toán này nhưng với các dữ liệu đầu vào khác, hãy thử thay đổi số lượng tác vụ hoặc giá trị hạt giống ngẫu nhiên (seed), hoặc cả hai. Việc thay đổi seed ngẫu nhiên về cơ bản cho phép bạn tự tạo ra vô số bài toán khác nhau, và cờ `-c` sẽ giúp bạn đối chiếu kết quả của mình. Hãy tiếp tục luyện tập cho đến khi bạn cảm thấy mình thực sự nắm vững các khái niệm.
 
-Một cờ hữu ích khác là `-l` (chữ L viết thường), cho phép bạn chỉ định chính xác các tác vụ mà bạn muốn quan sát quá trình bộ lập lịch hoạt động. Ví dụ, nếu bạn muốn biết thuật toán SJF sẽ hoạt động như thế nào với ba tác vụ có thời lượng lần lượt là 5, 10 và 15, bạn có thể chạy:
+Một cờ hữu ích khác là `-l` (chữ L viết thường), cho phép bạn chỉ định chính xác các tác vụ mà bạn muốn quan sát quá trình bộ lập lịch hoạt động. Ví dụ, nếu bạn muốn biết thuật toán SJF sẽ hoạt động như thế nào với ba tác vụ có thời lượng (length) lần lượt là 5, 10 và 15, bạn có thể chạy:
 
 ```sh
 prompt> ./scheduler.py -p SJF -l 5,10,15
